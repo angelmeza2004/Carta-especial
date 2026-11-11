@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8e7ec">
+<title>Una carta para ti ❤️</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 16px;
+    overflow-x: hidden;
+    font-family: Georgia, serif;
+
+    background:
+        radial-gradient(circle at 15% 15%, #fff4eb, transparent 38%),
+        radial-gradient(circle at 85% 20%, #f4ccda, transparent 40%),
+        radial-gradient(circle at 50% 100%, #e8d2e9, transparent 45%),
+        linear-gradient(135deg, #fce9ed, #f7dfe8, #f5e8e1);
+}
+
+/* FONDO ROMANTICO */
+
+.decorations {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.sparkle {
+    position: absolute;
+    color: #ffffffb5;
+    font-size: 23px;
+    animation: glow 4s ease-in-out infinite alternate;
+}
+
+.sparkle:nth-child(1) { top: 12%; left: 12%; }
+.sparkle:nth-child(2) { top: 25%; right: 12%; animation-delay: 1s; }
+.sparkle:nth-child(3) { bottom: 18%; left: 15%; animation-delay: 2s; }
+.sparkle:nth-child(4) { bottom: 12%; right: 15%; animation-delay: 1.5s; }
+
+@keyframes glow {
+    from { opacity: .2; transform: scale(.8); }
+    to { opacity: 1; transform: scale(1.3); }
+}
+
+/* CONTENEDOR */
+
+.container {
+    width: 100%;
+    max-width: 430px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+}
+
+/* SOBRE */
+
+.stage {
+    width: min(310px, 88vw);
+    height: 225px;
+    position: relative;
+    perspective: 1100px;
+    transition: opacity .7s, transform .7s;
+}
+
+.envelope {
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+    height: 180px;
+    border-radius: 8px;
+    background: linear-gradient(145deg, #e9b2c5, #bf718f);
+    box-shadow:
+        0 22px 40px #88435e35,
+        0 5px 12px #88435e20;
+}
+
+.envelope-back {
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #d995ad, #c77a98);
+}
+
+/* PAPEL DEL INTERIOR */
+
+.paper-preview {
+    position: absolute;
+    width: 88%;
+    height: 155px;
+    left: 6%;
+    bottom: 8px;
+    background: #fffaf2;
+    border-radius: 4px;
+    z-index: 2;
+    transition: transform 1s ease;
+}
+
+.paper-preview::after {
+    content: "♥";
+    position: absolute;
+    top: 40%;
+    width: 100%;
+    text-align: center;
+    color: #c47a94;
+    font-size: 30px;
+}
+
+/* PLIEGUES */
+
+.envelope-front {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+    background: linear-gradient(145deg, #e9b1c4, #c77a99);
+    clip-path: polygon(0 0, 50% 62%, 100% 0, 100% 100%, 0 100%);
+}
+
+.envelope-front::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, #b55d7d, transparent 65%);
+    clip-path: polygon(0 0, 50% 62%, 0 100%);
+}
+
+.envelope-front::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(-45deg, #b55d7d, transparent 65%);
+    clip-path: polygon(100% 0, 50% 62%, 100% 100%);
+}
+
+/* SOLAPA */
+
+.flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 105px;
+    z-index: 5;
+    background: linear-gradient(145deg, #b96886, #8e405f);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transition: transform .9s ease;
+}
+
+/* SELLO */
+
+.seal {
+    position: absolute;
+    top: 78px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 6;
+
+    color: #fff6ed;
+    font-size: 23px;
+
+    background: radial-gradient(circle at 35% 30%, #e7c2a0, #a95875);
+    border: 2px solid #f5dfd2;
+    box-shadow: 0 4px 12px #783c5840;
+    transition: opacity .5s, transform .5s;
+}
+
+/* ANIMACION DE APERTURA */
+
+.envelope.open .flap {
+    transform: rotateX(180deg);
+}
+
+.envelope.open .seal {
+    opacity: 0;
+    transform: translateX(-50%) scale(.5);
+}
+
+.envelope.open .paper-preview {
+    transform: translateY(-100px);
+}
+
+/* BOTON */
+
+button {
+    margin-top: 35px;
+    padding: 15px 38px;
+    border: 1px solid #ffffffa0;
+    border-radius: 35px;
+    background: linear-gradient(135deg, #c77896, #914461);
+    color: white;
+    font-family: Georgia, serif;
+    font-size: 17px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px #91466340;
+    transition: .3s;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 27px #91466355;
+}
+
+/* CARTA FINAL */
+
+.letter {
+    display: none;
+    width: 100%;
+    max-width: 390px;
+    padding: 42px 27px;
+    position: relative;
+
+    background: linear-gradient(145deg, #fffdf8, #fff5f0);
+    border: 1px solid #e9c9d2;
+    border-radius: 5px;
+
+    box-shadow:
+        0 20px 55px #82435b30,
+        inset 0 0 30px #f5e5dc55;
+}
+
+.letter::before {
+    content: "";
+    position: absolute;
+    inset: 9px;
+    border: 1px solid #e6c6cd;
+    pointer-events: none;
+}
+
+.letter-decoration {
+    color: #bd718b;
+    font-size: 35px;
+    margin-bottom: 20px;
+}
+
+.letter h2 {
+    font-size: 25px;
+    font-weight: normal;
+    color: #a65373;
+    margin-bottom: 23px;
+}
+
+.letter p {
+    font-size: 19px;
+    line-height: 1.9;
+    color: #765263;
+}
+
+.divider {
+    margin: 25px auto;
+    color: #c17b96;
+    letter-spacing: 8px;
+}
+
+.signature {
+    font-style: italic;
+    font-size: 17px;
+    line-height: 1.8;
+    color: #a65c79;
+}
+
+.letter-footer {
+    margin-top: 23px;
+    font-size: 23px;
+    color: #c47a94;
+}
+
+/* APARICION */
+
+.letter.show {
+    animation: showLetter 1.2s ease both;
+}
+
+@keyframes showLetter {
+    from {
+        opacity: 0;
+        transform: translateY(25px) scale(.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* CORAZONES FLOTANTES */
+
+.heart {
+    position: fixed;
+    bottom: -35px;
+    color: #c66f91;
+    pointer-events: none;
+    animation: float 7s linear forwards;
+    z-index: 1;
+}
+
+@keyframes float {
+    to {
+        transform: translateY(-110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 480px) {
+    .stage {
+        width: min(290px, 86vw);
+        height: 215px;
+    }
+
+    .letter {
+        padding: 38px 22px;
+    }
+
+    .letter h2 {
+        font-size: 23px;
+    }
+
+    .letter p {
+        font-size: 17px;
+        line-height: 1.85;
+    }
+
+    .signature {
+        font-size: 16px;
+    }
+}
+
+@media (max-height: 600px) {
+    body {
+        align-items: flex-start;
+    }
+
+    .container {
+        margin: auto 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="decorations">
+    <span class="sparkle">✧</span>
+    <span class="sparkle">♡</span>
+    <span class="sparkle">✦</span>
+    <span class="sparkle">♡</span>
+</div>
+
+<main class="container">
+
+    <!-- PRIMERA PANTALLA: SOLO SOBRE Y BOTON -->
+
+    <div class="stage" id="stage">
+
+        <div class="envelope" id="envelope">
+
+            <div class="envelope-back"></div>
+            <div class="paper-preview"></div>
+            <div class="envelope-front"></div>
+            <div class="flap"></div>
+            <div class="seal">♥</div>
+
+        </div>
+
+    </div>
+
+    <button id="openBtn" onclick="openLetter()">
+        Abre la carta ♡
+    </button>
+
+    <!-- SEGUNDA PANTALLA: MENSAJE -->
+
+    <article class="letter" id="letter">
+
+        <div class="letter-decoration">❀</div>
+
+        <h2>Para ti, mi niña bonita</h2>
+
+        <p>
+            Para la niña más bella que conozco,
+            esa que con su hermosa sonrisa y
+            bonitos ojos se roba mi corazón. ❤️
+        </p>
+
+        <div class="divider">♡ ✧ ♡</div>
+
+        <div class="signature">
+            Atentamente,<br>
+            Un loco enamorado.
+        </div>
+
+        <div class="letter-footer">🌷</div>
+
+    </article>
+
+</main>
+
+<script>
+
+function openLetter() {
+
+    const envelope = document.getElementById("envelope");
+    const stage = document.getElementById("stage");
+    const button = document.getElementById("openBtn");
+    const letter = document.getElementById("letter");
+
+    button.disabled = true;
+
+    envelope.classList.add("open");
+
+    setTimeout(() => {
+
+        stage.style.opacity = "0";
+        stage.style.transform = "translateY(-25px)";
+
+        button.style.opacity = "0";
+
+        setTimeout(() => {
+
+            stage.style.display = "none";
+            button.style.display = "none";
+
+            letter.style.display = "block";
+            letter.classList.add("show");
+
+        }, 650);
+
+    }, 900);
+}
+
+/* CORAZONES DECORATIVOS */
+
+setInterval(() => {
+
+    const heart = document.createElement("span");
+
+    heart.className = "heart";
+    heart.textContent = Math.random() > 0.5 ? "♥" : "♡";
+
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (13 + Math.random() * 17) + "px";
+    heart.style.animationDuration = (5 + Math.random() * 4) + "s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 9000);
+
+}, 1100);
+
+</script>
+
+</body>
+</html>
